@@ -8,15 +8,11 @@ class TaskService {
   TaskService._internal();
 
   static TaskService? _instance;
-  static late String _todaysTasksKey;
   static late String _tasksKey;
 
   static TaskService? getInstance() {
     if (_instance == null) {
       _instance = TaskService._internal();
-      _todaysTasksKey = DateTime.now().year.toString() +
-          DateTime.now().month.toString() +
-          DateTime.now().day.toString();
       _tasksKey = "tasks";
     }
 
@@ -52,7 +48,6 @@ class TaskService {
 
   Future<bool> add(Task task) async {
     var tasks = await getTasks();
-    print(tasks.length.toString());
     tasks.add(task);
     var res = await saveTasks(tasks);
     return res ?? false;
