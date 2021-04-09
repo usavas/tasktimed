@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:todotimer/models/task_daily.dart';
+import 'package:todotimer/services/task_service.dart';
 
 import 'db_service.dart';
 
@@ -31,6 +32,18 @@ class DailyTaskService {
     return jsonEncode(maps);
   }
 
+  Future<List<TaskDaily>> initDailyTasks() async {
+    var tasks = await TaskService.getInstance()?.getTasks();
+    if (tasks != null) {
+      var dailyTasksInit =
+          tasks.map((t) => TaskDaily(task: t, elapsedSeconds: 0)).toList();
+      await saveTasksDaily(dailyTasksInit);
+      return dailyTasksInit;
+    } else {
+      return [];
+    }
+  }
+
   Future<List<TaskDaily>> getTasksDaily() async {
     DbService? _db = DbService.getInstance();
 
@@ -38,12 +51,18 @@ class DailyTaskService {
     String tasksStr = await _db?.getJson(_todaysTasksKey) ?? "[]";
     dailyTasks = convertToTasksList(tasksStr);
 
-    return dailyTasks;
+    if (dailyTasks.length > 0) {
+      return dailyTasks;
+    } else {
+      // init daily tasks if not yet initialized
+      var dailyTasksInit = await initDailyTasks();
+      return dailyTasksInit;
+    }
   }
 
-  Future<bool?> saveTasksDaily(List<TaskDaily> tasks) async {
+  Future<bool?> saveTasksDaily(List<TaskDaily> tasksDaily) async {
     DbService? _db = DbService.getInstance();
-    return _db?.saveAsJson(_todaysTasksKey, convertToJson(tasks));
+    return _db?.saveAsJson(_todaysTasksKey, convertToJson(tasksDaily));
   }
 
   Future<bool> add(TaskDaily taskDaily) async {
@@ -73,3 +92,5 @@ class DailyTaskService {
     return res ?? false;
   }
 }
+
+class Task {}
