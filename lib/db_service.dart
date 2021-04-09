@@ -16,7 +16,7 @@ class DbService {
 
   Future<bool> saveAsJson(String key, String value) async {
     SharedPreferences _sharedPrefs = await SharedPreferences.getInstance();
-    return _sharedPrefs.setString(key, jsonEncode(value));
+    return _sharedPrefs.setString(key, value);
   }
 
   FutureOr<String?> getJson(String key) async {

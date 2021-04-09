@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:todotimer/db_service.dart';
 import 'package:todotimer/task.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class TaskService {
   TaskService._internal();
@@ -12,36 +11,36 @@ class TaskService {
   static late String _todaysTasksKey;
   static late String _tasksKey;
 
-  static getInstance() {
+  static TaskService? getInstance() {
     if (_instance == null) {
       _instance = TaskService._internal();
       _todaysTasksKey = DateTime.now().year.toString() +
           DateTime.now().month.toString() +
           DateTime.now().day.toString();
+      _tasksKey = "tasks";
     }
 
     return _instance;
   }
 
   List<Task> convertToTasksList(String tasksStr) {
-    Iterable tasksMap = jsonDecode(tasksStr);
-    List<Task> tasks = List<Task>.from(tasksMap.map((t) => Task.fromJson(t)));
+    var tasksMap = jsonDecode(tasksStr) as List;
+    List<Task> tasks = tasksMap.map((t) => Task.fromJson(t)).toList();
 
     return tasks;
   }
 
   String convertToJson(List<Task> tasks) {
-    return jsonEncode(tasks);
+    List<Map<String, dynamic>> maps = tasks.map((t) => t.toJson()).toList();
+    return jsonEncode(maps);
   }
 
-  FutureOr<List<Task>> getTasks() async {
+  Future<List<Task>> getTasks() async {
     DbService? _db = DbService.getInstance();
 
-    var tasks = <Task>[];
-    var tasksStr = await _db?.getJson(_tasksKey);
-    if (tasksStr != null) {
-      tasks = convertToTasksList(tasksStr);
-    }
+    List<Task> tasks = [];
+    String tasksStr = await _db?.getJson(_tasksKey) ?? "[]";
+    tasks = convertToTasksList(tasksStr);
 
     return tasks;
   }
@@ -53,6 +52,7 @@ class TaskService {
 
   Future<bool> add(Task task) async {
     var tasks = await getTasks();
+    print(tasks.length.toString());
     tasks.add(task);
     var res = await saveTasks(tasks);
     return res ?? false;
