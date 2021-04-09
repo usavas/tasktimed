@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:todotimer/task_daily.dart';
+import 'package:todotimer/models/task_daily.dart';
 
 import 'db_service.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todotimer/task.dart';
+import 'package:todotimer/models/task.dart';
 
 class TaskItem extends StatefulWidget {
   TaskItem(this.task);

@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:todotimer/db_service.dart';
-import 'package:todotimer/task.dart';
+import 'package:todotimer/models/task.dart';
+
+import 'db_service.dart';
 
 class TaskService {
   TaskService._internal();

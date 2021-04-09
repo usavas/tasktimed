@@ -1,4 +1,4 @@
-import 'package:todotimer/task.dart';
+import 'package:todotimer/models/task.dart';
 
 class TaskDaily {
   Task? task;
