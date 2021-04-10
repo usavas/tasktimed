@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todotimer/bloc/dailytask_bloc/dailytask_bloc.dart';
 import 'package:todotimer/bloc/taskbloc/tasks_bloc.dart';
 import 'package:todotimer/models/task.dart';
-import 'package:todotimer/models/task_daily.dart';
 
 class DailyTaskItem extends StatefulWidget {
   DailyTaskItem();

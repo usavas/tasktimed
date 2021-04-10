@@ -20,17 +20,6 @@ class DailyTaskService {
     return _instance;
   }
 
-  // Future<List<TaskDaily>> updateDailyTaskList() async {
-  //   var tasks = await TaskService.getInstance()?.getTasks();
-  //   var tasksDaily = await getTasksDaily();
-
-  //   if (tasks?.length != tasksDaily.length) {
-  //     tasks?.forEach((t) {
-
-  //     });
-  //   }
-  // }
-
   Future<bool> add(TaskDaily taskDaily) async {
     var tasks = await getTasksDaily();
     tasks.add(taskDaily);
@@ -66,13 +55,6 @@ class DailyTaskService {
     dailyTasks = convertToTasksList(tasksStr);
 
     return dailyTasks;
-    // if (dailyTasks.length > 0) {
-    //   return dailyTasks;
-    // } else {
-    //   // init daily tasks if not yet initialized
-    //   var dailyTasksInit = await initDailyTasks();
-    //   return dailyTasksInit;
-    // }
   }
 
   Future<List<TaskDaily>> initDailyTasks() async {
