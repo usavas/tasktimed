@@ -6,6 +6,6 @@ abstract class TasksState {}
 class TasksInitial extends TasksState {}
 
 class TasksChanged extends TasksState {
-  final List<TaskDaily> tasksDaily;
-  TasksChanged(this.tasksDaily);
+  final Future<List<TaskDaily>> dailyTasks;
+  TasksChanged(this.dailyTasks);
 }

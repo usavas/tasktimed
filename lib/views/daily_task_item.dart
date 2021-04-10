@@ -26,9 +26,12 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
             trailing: ElevatedButton(
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 2),
-                child: Text('X'),
+                child: Text('Start'),
               ),
-              onPressed: () {},
+              onPressed: () {
+                print(
+                    "max seconds: ${state.dailyTask.task?.maxSeconds.toString()}");
+              },
             ),
           );
         } else {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todotimer/bloc/dailytask_bloc/dailytask_bloc.dart';
+import 'package:todotimer/bloc/taskbloc/tasks_bloc.dart';
 import 'package:todotimer/models/task.dart';
 import 'package:todotimer/models/task_daily.dart';
 import 'package:todotimer/services/daily_task_service.dart';
@@ -18,40 +19,61 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Daily Tasks'),
-      ),
-      body: Container(
-          child: FutureBuilder(
-              future: DailyTaskService.getInstance()?.getTasksDaily(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text(snapshot.error.toString()),
-                  );
-                } else if (snapshot.hasData) {
-                  var tasks = snapshot.data as List<TaskDaily>;
-                  if (tasks.length > 0) {
-                    return ListView.builder(
-                        itemCount: tasks.length,
-                        itemBuilder: (_, i) => BlocProvider<DailyTaskBloc>(
-                            create: (ctx) => DailyTaskBloc()
-                              ..add(InitDailyTaskValue(tasks[i])),
-                            child: DailyTaskItem()));
-                  } else {
-                    return Center(child: Text('no task in the list'));
-                  }
-                } else {
-                  return Center(child: Text('retrieving the task list'));
-                }
-              })),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {});
+    return BlocProvider<TasksBloc>(
+      create: (context) => TasksBloc()..add(InitializeDailyTasksBasedOnTasks()),
+      child: BlocBuilder<TasksBloc, TasksState>(
+        builder: (taskContext, state) {
+          if (state is TasksChanged) {
+            return Scaffold(
+              appBar: AppBar(
+                title: Text('Daily Tasks'),
+              ),
+              body: Container(
+                  child: FutureBuilder(
+                      future: state.dailyTasks,
+                      builder: (_, snapshot) {
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text(snapshot.error.toString()),
+                          );
+                        } else if (snapshot.hasData) {
+                          var tasks = snapshot.data as List<TaskDaily>;
+                          if (tasks.length > 0) {
+                            return ListView.builder(
+                                itemCount: tasks.length,
+                                itemBuilder: (_, i) =>
+                                    BlocProvider<DailyTaskBloc>(
+                                        create: (ctx) => DailyTaskBloc()
+                                          ..add(InitDailyTaskValue(tasks[i])),
+                                        child: DailyTaskItem()));
+                          } else {
+                            return Center(child: Text('no task in the list'));
+                          }
+                        } else {
+                          return Center(
+                              child: Text('retrieving the task list'));
+                        }
+                      })),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  var bloc = BlocProvider.of<TasksBloc>(taskContext);
+                  bloc.add(AddNewTask(Task(
+                    uid: Uuid().v4(),
+                    title: "New task in the neighborhood",
+                    minSeconds: 120,
+                    maxSeconds: 1200,
+                  )));
+                },
+                tooltip: 'Add new task',
+                child: Icon(Icons.add),
+              ),
+            );
+          } else {
+            return Center(
+              child: Text('error :/'),
+            );
+          }
         },
-        tooltip: 'Add new task',
-        child: Icon(Icons.add),
       ),
     );
   }
