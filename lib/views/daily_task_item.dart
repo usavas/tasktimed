@@ -13,10 +13,16 @@ class DailyTaskItem extends StatefulWidget {
 class _DailyTaskItemState extends State<DailyTaskItem> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListTile(
-        title: Text(widget.dailyTask.task?.title ?? ""),
-        subtitle: Text(widget.dailyTask.elapsedSeconds?.toString() ?? ""),
+    // wrap with bloc
+    return ListTile(
+      title: Text(widget.dailyTask.task?.title ?? ""),
+      subtitle: Text(widget.dailyTask.elapsedSeconds?.toString() ?? ""),
+      trailing: ElevatedButton(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 2),
+          child: Text('X'),
+        ),
+        onPressed: () {},
       ),
     );
   }
