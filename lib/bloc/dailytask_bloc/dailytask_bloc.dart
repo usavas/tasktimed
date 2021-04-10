@@ -15,7 +15,7 @@ class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
   Stream<DailyTaskState> mapEventToState(
     DailyTaskEvent event,
   ) async* {
-    if (event is InitDailyTaskValue) {
+    if (event is InitDailyTaskValues) {
       yield DailyTaskInitial(event.dailyTask);
     }
     if (event is StartCountDown) {

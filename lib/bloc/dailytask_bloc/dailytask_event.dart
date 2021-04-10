@@ -3,9 +3,9 @@ part of 'dailytask_bloc.dart';
 @immutable
 abstract class DailyTaskEvent {}
 
-class InitDailyTaskValue extends DailyTaskEvent {
+class InitDailyTaskValues extends DailyTaskEvent {
   final TaskDaily dailyTask;
-  InitDailyTaskValue(this.dailyTask);
+  InitDailyTaskValues(this.dailyTask);
 }
 
 class StartCountDown extends DailyTaskEvent {

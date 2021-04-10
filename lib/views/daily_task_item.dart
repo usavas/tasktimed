@@ -6,7 +6,9 @@ import 'package:todotimer/models/task.dart';
 import 'package:todotimer/models/task_daily.dart';
 
 class DailyTaskItem extends StatefulWidget {
+  // DailyTaskItem() : super(key: key);
   DailyTaskItem();
+
   // DailyTaskItem(this.dailyTask);
 
   // final TaskDaily dailyTask;
