@@ -1,21 +1,37 @@
 part of 'tasks_bloc.dart';
 
 @immutable
-abstract class TasksEvent {}
+abstract class TasksEvent extends Equatable {
+  const TasksEvent();
+}
 
-class InitializeDailyTasksBasedOnTasks extends TasksEvent {}
+class InitializeDailyTasksBasedOnTasks extends TasksEvent {
+  const InitializeDailyTasksBasedOnTasks();
+
+  @override
+  List<Object?> get props => [];
+}
 
 class AddNewTask extends TasksEvent {
-  AddNewTask(this.task);
+  const AddNewTask(this.task);
   final Task task;
+
+  @override
+  List<Object?> get props => [task];
 }
 
 class DeleteTask extends TasksEvent {
-  DeleteTask(this.task);
+  const DeleteTask(this.task);
   final Task task;
+
+  @override
+  List<Object?> get props => [task];
 }
 
 class UpdateTask extends TasksEvent {
-  UpdateTask(this.task);
+  const UpdateTask(this.task);
   final Task task;
+
+  @override
+  List<Object?> get props => [task];
 }
