@@ -50,7 +50,7 @@ class DailyTaskService {
 
   //   if (tasks?.length != tasksDaily.length) {
   //     tasks?.forEach((t) {
-        
+
   //     });
   //   }
   // }

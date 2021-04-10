@@ -28,32 +28,19 @@ class _HomeScreenState extends State<HomeScreen> {
               appBar: AppBar(
                 title: Text('Daily Tasks'),
               ),
-              body: Container(
-                  child: FutureBuilder(
-                      future: state.dailyTasks,
-                      builder: (_, snapshot) {
-                        if (snapshot.hasError) {
-                          return Center(
-                            child: Text(snapshot.error.toString()),
-                          );
-                        } else if (snapshot.hasData) {
-                          var tasks = snapshot.data as List<TaskDaily>;
-                          if (tasks.length > 0) {
-                            return ListView.builder(
-                                itemCount: tasks.length,
-                                itemBuilder: (_, i) =>
-                                    BlocProvider<DailyTaskBloc>(
-                                        create: (ctx) => DailyTaskBloc()
-                                          ..add(InitDailyTaskValue(tasks[i])),
-                                        child: DailyTaskItem()));
-                          } else {
-                            return Center(child: Text('no task in the list'));
-                          }
-                        } else {
-                          return Center(
-                              child: Text('retrieving the task list'));
-                        }
-                      })),
+              body: Container(child: Builder(builder: (_) {
+                var tasks = state.dailyTasks;
+                if (tasks.length > 0) {
+                  return ListView.builder(
+                      itemCount: tasks.length,
+                      itemBuilder: (_, i) => BlocProvider<DailyTaskBloc>(
+                          create: (ctx) => DailyTaskBloc()
+                            ..add(InitDailyTaskValue(tasks[i])),
+                          child: DailyTaskItem()));
+                } else {
+                  return Center(child: Text('no task in the list'));
+                }
+              })),
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
                   var bloc = BlocProvider.of<TasksBloc>(taskContext);
@@ -69,9 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             );
           } else {
-            return Center(
-              child: Text('error :/'),
-            );
+            return Center(child: Text('retrieving the task list'));
           }
         },
       ),
