@@ -1,13 +1,9 @@
 part of 'tasks_bloc.dart';
 
 @immutable
-abstract class TasksState {
-  TasksState();
-}
+abstract class TasksState {}
 
-class TasksInitial extends TasksState {
-  TasksInitial();
-}
+class TasksInitial extends TasksState {}
 
 class TasksChanged extends TasksState {
   final List<TaskDaily> dailyTasks;
