@@ -5,10 +5,8 @@ import 'package:todotimer/models/task_daily.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:equatable/equatable.dart';
 import 'package:todotimer/services/daily_task_service.dart';
 import 'package:todotimer/services/task_service.dart';
-import 'package:todotimer/services/timer_service.dart';
 
 part 'tasks_event.dart';
 part 'tasks_state.dart';
