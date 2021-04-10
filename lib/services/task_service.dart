@@ -20,37 +20,13 @@ class TaskService {
     return _instance;
   }
 
-  List<Task> convertToTasksList(String tasksStr) {
-    var tasksMap = jsonDecode(tasksStr) as List;
-    List<Task> tasks = tasksMap.map((t) => Task.fromJson(t)).toList();
-
-    return tasks;
-  }
-
-  String convertToJson(List<Task> tasks) {
-    List<Map<String, dynamic>> maps = tasks.map((t) => t.toJson()).toList();
-    return jsonEncode(maps);
-  }
-
-  Future<List<Task>> getTasks() async {
-    DbService? _db = DbService.getInstance();
-
-    List<Task> tasks = [];
-    String tasksStr = await _db?.getJson(_tasksKey) ?? "[]";
-    tasks = convertToTasksList(tasksStr);
-
-    return tasks;
-  }
-
-  Future<bool?> saveTasks(List<Task> tasks) async {
-    DbService? _db = DbService.getInstance();
-    return _db?.saveAsJson(_tasksKey, convertToJson(tasks));
-  }
-
   Future<bool> add(Task task) async {
     var tasks = await getTasks();
     tasks.add(task);
     var res = await saveTasks(tasks);
+    //
+    print("task with id added: ${task.uid}");
+    //
     return res ?? false;
   }
 
@@ -68,8 +44,37 @@ class TaskService {
   delete(Task task) async {
     var tasks = await getTasks();
     tasks.removeWhere((t) => t.uid == task.uid);
-
+    //
+    print("task with id is deleted: ${task.uid}");
+    //
     var res = await saveTasks(tasks);
     return res ?? false;
+  }
+
+  Future<List<Task>> getTasks() async {
+    DbService? _db = DbService.getInstance();
+
+    List<Task> tasks = [];
+    String tasksStr = await _db?.getJson(_tasksKey) ?? "[]";
+    tasks = convertToTasksList(tasksStr);
+
+    return tasks;
+  }
+
+  Future<bool?> saveTasks(List<Task> tasks) async {
+    DbService? _db = DbService.getInstance();
+    return _db?.saveAsJson(_tasksKey, convertToJson(tasks));
+  }
+
+  List<Task> convertToTasksList(String tasksStr) {
+    var tasksMap = jsonDecode(tasksStr) as List;
+    List<Task> tasks = tasksMap.map((t) => Task.fromJson(t)).toList();
+
+    return tasks;
+  }
+
+  String convertToJson(List<Task> tasks) {
+    List<Map<String, dynamic>> maps = tasks.map((t) => t.toJson()).toList();
+    return jsonEncode(maps);
   }
 }

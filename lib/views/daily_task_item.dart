@@ -18,7 +18,6 @@ class DailyTaskItem extends StatefulWidget {
 class _DailyTaskItemState extends State<DailyTaskItem> {
   @override
   Widget build(BuildContext context) {
-    // wrap with bloc
     return BlocBuilder<DailyTaskBloc, DailyTaskState>(
       builder: (ctx, state) {
         if (state is DailyTaskInitial) {
