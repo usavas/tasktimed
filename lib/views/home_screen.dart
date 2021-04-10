@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todotimer/bloc/dailytask_bloc/dailytask_bloc.dart';
 import 'package:todotimer/models/task.dart';
 import 'package:todotimer/models/task_daily.dart';
 import 'package:todotimer/services/daily_task_service.dart';
@@ -33,7 +35,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (tasks.length > 0) {
                     return ListView.builder(
                         itemCount: tasks.length,
-                        itemBuilder: (_, i) => DailyTaskItem(tasks[i]));
+                        itemBuilder: (_, i) => BlocProvider<DailyTaskBloc>(
+                            create: (ctx) => DailyTaskBloc()
+                              ..add(InitDailyTaskValue(tasks[i])),
+                            child: DailyTaskItem()));
                   } else {
                     return Center(child: Text('no task in the list'));
                   }

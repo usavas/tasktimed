@@ -3,7 +3,12 @@ part of 'dailytask_bloc.dart';
 @immutable
 abstract class DailyTaskState {}
 
-class TaskInitial extends DailyTaskState {}
+class DailyTaskDefault extends DailyTaskState {}
+
+class DailyTaskInitial extends DailyTaskState {
+  final TaskDaily dailyTask;
+  DailyTaskInitial(this.dailyTask);
+}
 
 //this updates the UI
 class DailyTaskCountDownStarted extends DailyTaskState {

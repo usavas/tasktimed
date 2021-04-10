@@ -9,12 +9,15 @@ part 'dailytask_event.dart';
 part 'dailytask_state.dart';
 
 class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
-  DailyTaskBloc() : super(TaskInitial());
+  DailyTaskBloc() : super(DailyTaskDefault());
 
   @override
   Stream<DailyTaskState> mapEventToState(
     DailyTaskEvent event,
   ) async* {
+    if (event is InitDailyTaskValue) {
+      yield DailyTaskInitial(event.dailyTask);
+    }
     if (event is StartCountDown) {
       yield DailyTaskCountDownStarted(event.secondsLeft);
 
