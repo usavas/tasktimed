@@ -31,13 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
               body: Container(child: Builder(builder: (_) {
                 var tasks = state.dailyTasks;
                 if (tasks.length > 0) {
-                  // return BlocProvider<DailyTaskBloc>(
-                  //     create: (context) => DailyTaskBloc(),
-                  //     child: BlocBuilder(
-                  //       builder: (context, state) => ,
-                  //       child: ListView.builder(
-                  //           itemBuilder: (context, i) => DailyTaskItem()),
-                  //     ));
                   return ListView.builder(
                       itemCount: tasks.length,
                       itemBuilder: (_, i) => BlocProvider<DailyTaskBloc>(
