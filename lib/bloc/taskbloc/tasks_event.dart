@@ -1,9 +1,7 @@
 part of 'tasks_bloc.dart';
 
 @immutable
-abstract class TasksEvent {
-  TasksEvent();
-}
+abstract class TasksEvent {}
 
 class InitializeDailyTasksBasedOnTasks extends TasksEvent {}
 

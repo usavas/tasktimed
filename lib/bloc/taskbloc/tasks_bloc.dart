@@ -24,23 +24,23 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         yield TasksChanged(dailyTasks);
       }
     } else if (event is AddNewTask) {
-      TaskService.getInstance()?.add(event.task);
-      DailyTaskService.getInstance()
+      await TaskService.getInstance()?.add(event.task);
+      await DailyTaskService.getInstance()
           ?.add(TaskDaily(task: event.task, elapsedSeconds: 0));
       var tasksDaily = await DailyTaskService.getInstance()?.getTasksDaily();
       if (tasksDaily != null) {
         yield TasksChanged(tasksDaily);
       }
     } else if (event is DeleteTask) {
-      TaskService.getInstance()?.delete(event.task);
-      DailyTaskService.getInstance()?.delete(TaskDaily(task: event.task));
+      await TaskService.getInstance()?.delete(event.task);
+      await DailyTaskService.getInstance()?.delete(TaskDaily(task: event.task));
       var tasksDaily = await DailyTaskService.getInstance()?.getTasksDaily();
       if (tasksDaily != null) {
         yield TasksChanged(tasksDaily);
       }
     } else if (event is UpdateTask) {
-      TaskService.getInstance()?.update(event.task);
-      DailyTaskService.getInstance()?.update(TaskDaily(task: event.task));
+      await TaskService.getInstance()?.update(event.task);
+      await DailyTaskService.getInstance()?.update(TaskDaily(task: event.task));
       var tasksDaily = await DailyTaskService.getInstance()?.getTasksDaily();
       if (tasksDaily != null) {
         yield TasksChanged(tasksDaily);
