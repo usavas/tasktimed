@@ -44,6 +44,17 @@ class DailyTaskService {
     }
   }
 
+  // Future<List<TaskDaily>> updateDailyTaskList() async {
+  //   var tasks = await TaskService.getInstance()?.getTasks();
+  //   var tasksDaily = await getTasksDaily();
+
+  //   if (tasks?.length != tasksDaily.length) {
+  //     tasks?.forEach((t) {
+        
+  //     });
+  //   }
+  // }
+
   Future<List<TaskDaily>> getTasksDaily() async {
     DbService? _db = DbService.getInstance();
 
@@ -92,5 +103,3 @@ class DailyTaskService {
     return res ?? false;
   }
 }
-
-class Task {}
