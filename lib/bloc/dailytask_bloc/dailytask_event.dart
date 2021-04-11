@@ -3,18 +3,25 @@ part of 'dailytask_bloc.dart';
 @immutable
 abstract class DailyTaskEvent {}
 
-class InitDailyTaskValue extends DailyTaskEvent {
+class InitDailyTaskValues extends DailyTaskEvent {
   final TaskDaily dailyTask;
-  InitDailyTaskValue(this.dailyTask);
+  InitDailyTaskValues(this.dailyTask);
+}
+
+class CountDown extends DailyTaskEvent {
+  CountDown(this.dailyTask, this.elapsedSeconds);
+  final int elapsedSeconds;
+  final TaskDaily dailyTask;
 }
 
 class StartCountDown extends DailyTaskEvent {
-  StartCountDown(this.secondsLeft);
+  StartCountDown(this.dailyTask, this.secondsLeft);
   final int secondsLeft;
+  final TaskDaily dailyTask;
 }
 
 class StopCountDown extends DailyTaskEvent {
-  StopCountDown(this.taskDaily, this.countdownValue);
+  StopCountDown(this.taskDaily, this.secondsLeft);
   final TaskDaily taskDaily;
-  final int countdownValue;
+  final int secondsLeft;
 }

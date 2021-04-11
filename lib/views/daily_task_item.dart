@@ -7,52 +7,92 @@ import 'package:todotimer/models/task_daily.dart';
 
 class DailyTaskItem extends StatefulWidget {
   DailyTaskItem();
-  // DailyTaskItem(this.dailyTask);
-
-  // final TaskDaily dailyTask;
 
   @override
   _DailyTaskItemState createState() => _DailyTaskItemState();
 }
 
 class _DailyTaskItemState extends State<DailyTaskItem> {
+  bool _toggleCountDown = true;
+
   @override
   Widget build(BuildContext context) {
-    // wrap with bloc
     return BlocBuilder<DailyTaskBloc, DailyTaskState>(
       builder: (ctx, state) {
-        if (state is DailyTaskInitial) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(state.dailyTask.task?.title ?? ""),
-              Text(state.dailyTask.elapsedSeconds?.toString() ?? ""),
-              Column(
-                children: [
-                  ElevatedButton(
-                    child: Container(
-                      child: Text('S'),
-                    ),
-                    onPressed: () {
-                      print(
-                          "max seconds: ${state.dailyTask.task?.maxSeconds.toString()}");
-                    },
-                  ),
-                  ElevatedButton(
-                    child: Text('D'),
-                    onPressed: () {
-                      BlocProvider.of<TasksBloc>(context)
-                          .add(DeleteTask(state.dailyTask.task ?? Task()));
-                      print('deleted');
-                    },
-                  )
-                ],
-              ),
-            ],
+        TaskDaily? _dailyTask;
+        int? _secondsLeft;
+
+        if (state is DailyTaskLoading) {
+          return Center(
+            child: Text('Loading...'),
           );
-        } else {
-          return Container(child: Text('could not initialize'));
+        } else if (state is DailyTaskInitial) {
+          _dailyTask = state.dailyTask;
+          _secondsLeft = _dailyTask.getSecondsLeftForTheDay();
+        } else if (state is CountDownState) {
+          _dailyTask = state.dailyTask;
+          _secondsLeft = state.leftSeconds;
+          print('seconds left: ${_secondsLeft.toString()}');
+        } else if (state is CountDownStopped) {
+          _dailyTask = state.dailyTask;
+          _secondsLeft = state.timeLeft;
         }
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(_dailyTask?.task?.title ?? ""),
+            Column(
+              children: [
+                Text(
+                  "Time left:",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  _secondsLeft?.toString() ??
+                      _dailyTask?.task?.maxSeconds?.toString() ??
+                      "",
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                ElevatedButton(
+                  child: Container(
+                    child: Text('S'),
+                  ),
+                  onPressed: () {
+                    final _bloc = BlocProvider.of<DailyTaskBloc>(context);
+
+                    if (_toggleCountDown) {
+                      // start the timer
+                      _bloc.add(StartCountDown(
+                        _dailyTask ?? TaskDaily(),
+                        _dailyTask?.elapsedSeconds ?? 0,
+                      ));
+                    } else {
+                      _bloc.add(
+                        StopCountDown(
+                          _dailyTask ?? TaskDaily(),
+                          _secondsLeft ?? 0,
+                        ),
+                      );
+                    }
+                    _toggleCountDown = !_toggleCountDown;
+                  },
+                ),
+                ElevatedButton(
+                  child: Text('D'),
+                  onPressed: () {
+                    BlocProvider.of<TasksBloc>(context)
+                        .add(DeleteTask(_dailyTask?.task ?? Task()));
+                    print('deleted');
+                  },
+                )
+              ],
+            ),
+          ],
+        );
       },
     );
   }

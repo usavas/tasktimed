@@ -9,27 +9,35 @@ part 'dailytask_event.dart';
 part 'dailytask_state.dart';
 
 class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
-  DailyTaskBloc() : super(DailyTaskDefault());
+  DailyTaskBloc() : super(DailyTaskLoading());
+
+  late Timer _timer;
 
   @override
   Stream<DailyTaskState> mapEventToState(
     DailyTaskEvent event,
   ) async* {
-    if (event is InitDailyTaskValue) {
-      yield DailyTaskInitial(event.dailyTask);
-    }
-    if (event is StartCountDown) {
-      yield DailyTaskCountDownStarted(event.secondsLeft);
+    yield DailyTaskLoading();
 
-      // var timer = TimerService(event.secondsLeft);
-      // var stream = timer.startTimer();
-      // stream.listen((currSeconds) {
-      //   yield DailyTaskCountDown()
-      // });
+    if (event is InitDailyTaskValues) {
+      yield DailyTaskInitial(event.dailyTask);
+    } else if (event is StartCountDown) {
+      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        if (timer.tick >= event.dailyTask.getSecondsLeftForTheDay()) {
+          add(StopCountDown(
+              event.dailyTask, event.dailyTask.getSecondsLeftForTheDay()));
+        } else {
+          int _secondsLeft = event.dailyTask.getSecondsLeftForTheDay();
+          event.dailyTask.elapsedSeconds = event.dailyTask.elapsedSeconds! + 1;
+          add(CountDown(event.dailyTask, _secondsLeft - 1));
+        }
+      });
+    } else if (event is CountDown) {
+      yield CountDownState(event.dailyTask, event.elapsedSeconds);
     } else if (event is StopCountDown) {
-      DailyTaskService.getInstance()
-          ?.update(event.taskDaily..elapsedSeconds = event.countdownValue);
-      yield CountDownStopped(event.countdownValue);
+      _timer.cancel();
+      await DailyTaskService.getInstance()?.update(event.taskDaily);
+      yield CountDownStopped(event.taskDaily, event.secondsLeft);
     }
   }
 }
