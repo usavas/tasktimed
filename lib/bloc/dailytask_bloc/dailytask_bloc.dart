@@ -9,7 +9,7 @@ part 'dailytask_event.dart';
 part 'dailytask_state.dart';
 
 class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
-  DailyTaskBloc() : super(DailyTaskDefault());
+  DailyTaskBloc() : super(DailyTaskLoading());
 
   late Timer _timer;
 
@@ -17,7 +17,7 @@ class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
   Stream<DailyTaskState> mapEventToState(
     DailyTaskEvent event,
   ) async* {
-    // yield DailyTaskDefault();
+    yield DailyTaskLoading();
 
     if (event is InitDailyTaskValues) {
       yield DailyTaskInitial(event.dailyTask);
@@ -25,25 +25,34 @@ class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
       int maxSeconds = event.dailyTask.task?.maxSeconds ?? 0;
       _timer = Timer.periodic(Duration(seconds: 1), (timer) {
         if (_timer.tick >= maxSeconds) {
+          // todo fire the alarm here
           add(StopCountDown(event.dailyTask, _timer.tick));
         } else {
-          // print(_timer.tick.toString());
           add(CountDown(event.dailyTask));
         }
       });
     } else if (event is CountDown) {
-      print(_timer.tick.toString());
+      event.dailyTask.elapsedSeconds = event.dailyTask.elapsedSeconds! - 1;
       yield (CountDownState(event.dailyTask, _timer.tick));
     } else if (event is StopCountDown) {
       // update the db with the new elapsed time
-      int countDownValue = _timer.tick;
-      int totalElapsedSeconds = event.taskDaily.elapsedSeconds ??
-          event.taskDaily.task?.maxSeconds ??
-          0 + countDownValue;
+      int _leftSeconds = (event.taskDaily.task!.maxSeconds! -
+              event.taskDaily.elapsedSeconds!) -
+          _timer.tick;
+      print("left seconds: ${_leftSeconds.toString()}");
       _timer.cancel();
-      DailyTaskService.getInstance()
-          ?.update(event.taskDaily..elapsedSeconds = totalElapsedSeconds);
-      yield CountDownStopped(event.countdownValue);
+      TaskDaily dailyTaskToUpdate =
+          event.taskDaily.copyWith(elapsedSeconds: _leftSeconds);
+      await DailyTaskService.getInstance()?.update(dailyTaskToUpdate);
+      yield CountDownStopped(event.taskDaily, _leftSeconds);
     }
+  }
+
+  int getElapsedTime() {
+    return _timer.tick;
+  }
+
+  int getTimeLeft(int totalTime) {
+    return totalTime - _timer.tick;
   }
 }

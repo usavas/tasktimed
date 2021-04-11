@@ -22,12 +22,11 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
         TaskDaily? _dailyTask;
         int? _secondsLeft;
 
-        if (state is DailyTaskDefault) {
+        if (state is DailyTaskLoading) {
           return Center(
             child: Text('Loading...'),
           );
-        }
-        if (state is DailyTaskInitial) {
+        } else if (state is DailyTaskInitial) {
           _dailyTask = state.dailyTask;
         } else if (state is CountDownState) {
           print('countdown state is called');
@@ -35,6 +34,9 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
           int _maxSeconds = _dailyTask.task?.maxSeconds ?? 0;
           _secondsLeft = _maxSeconds - state.timerTickValue;
           print('seconds left: ${_secondsLeft.toString()}');
+        } else if (state is CountDownStopped) {
+          _dailyTask = state.dailyTask;
+          _secondsLeft = state.timeLeft;
         }
 
         return Row(

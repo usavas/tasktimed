@@ -3,7 +3,7 @@ part of 'dailytask_bloc.dart';
 @immutable
 abstract class DailyTaskState {}
 
-class DailyTaskDefault extends DailyTaskState {}
+class DailyTaskLoading extends DailyTaskState {}
 
 class DailyTaskInitial extends DailyTaskState {
   final TaskDaily dailyTask;
@@ -19,5 +19,6 @@ class CountDownState extends DailyTaskState {
 // this updates the db
 class CountDownStopped extends DailyTaskState {
   final int timeLeft;
-  CountDownStopped(this.timeLeft);
+  final TaskDaily dailyTask;
+  CountDownStopped(this.dailyTask, this.timeLeft);
 }

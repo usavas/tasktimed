@@ -12,4 +12,11 @@ class TaskDaily {
 
   Map<String, dynamic> toJson() =>
       {'task': task?.toJson(), 'elapsedSeconds': elapsedSeconds};
+
+  TaskDaily copyWith({Task? task, int? elapsedSeconds}) {
+    return TaskDaily(
+      task: task ?? this.task,
+      elapsedSeconds: elapsedSeconds ?? this.elapsedSeconds,
+    );
+  }
 }
