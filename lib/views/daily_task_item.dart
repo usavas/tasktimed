@@ -28,11 +28,10 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
           );
         } else if (state is DailyTaskInitial) {
           _dailyTask = state.dailyTask;
+          _secondsLeft = _dailyTask.getSecondsLeftForTheDay();
         } else if (state is CountDownState) {
-          print('countdown state is called');
           _dailyTask = state.dailyTask;
-          int _maxSeconds = _dailyTask.task?.maxSeconds ?? 0;
-          _secondsLeft = _maxSeconds - state.timerTickValue;
+          _secondsLeft = state.leftSeconds;
           print('seconds left: ${_secondsLeft.toString()}');
         } else if (state is CountDownStopped) {
           _dailyTask = state.dailyTask;
@@ -43,10 +42,18 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(_dailyTask?.task?.title ?? ""),
-            Text(
-              _secondsLeft?.toString() ??
-                  _dailyTask?.task?.maxSeconds?.toString() ??
-                  "",
+            Column(
+              children: [
+                Text(
+                  "Time left:",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  _secondsLeft?.toString() ??
+                      _dailyTask?.task?.maxSeconds?.toString() ??
+                      "",
+                ),
+              ],
             ),
             Column(
               children: [

@@ -9,8 +9,8 @@ class InitDailyTaskValues extends DailyTaskEvent {
 }
 
 class CountDown extends DailyTaskEvent {
-  CountDown(this.dailyTask);
-  // final int elapsedSeconds;
+  CountDown(this.dailyTask, this.elapsedSeconds);
+  final int elapsedSeconds;
   final TaskDaily dailyTask;
 }
 
@@ -21,7 +21,7 @@ class StartCountDown extends DailyTaskEvent {
 }
 
 class StopCountDown extends DailyTaskEvent {
-  StopCountDown(this.taskDaily, this.countdownValue);
+  StopCountDown(this.taskDaily, this.secondsLeft);
   final TaskDaily taskDaily;
-  final int countdownValue;
+  final int secondsLeft;
 }

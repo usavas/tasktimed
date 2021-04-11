@@ -12,8 +12,8 @@ class DailyTaskInitial extends DailyTaskState {
 
 class CountDownState extends DailyTaskState {
   final TaskDaily dailyTask;
-  final int timerTickValue;
-  CountDownState(this.dailyTask, this.timerTickValue);
+  final int leftSeconds;
+  CountDownState(this.dailyTask, this.leftSeconds);
 }
 
 // this updates the db

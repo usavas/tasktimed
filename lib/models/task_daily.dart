@@ -19,4 +19,10 @@ class TaskDaily {
       elapsedSeconds: elapsedSeconds ?? this.elapsedSeconds,
     );
   }
+
+  int getSecondsLeftForTheDay() {
+    int _maxSeconds = this.task?.maxSeconds ?? 0;
+    int _timeElapsed = this.elapsedSeconds ?? 0;
+    return _maxSeconds - _timeElapsed;
+  }
 }
