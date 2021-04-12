@@ -4,6 +4,7 @@ import 'package:todotimer/bloc/dailytask_bloc/dailytask_bloc.dart';
 import 'package:todotimer/bloc/taskbloc/tasks_bloc.dart';
 import 'package:todotimer/models/task.dart';
 import 'package:todotimer/views/daily_task_item.dart';
+import 'package:todotimer/views/task_screen.dart';
 import 'package:uuid/uuid.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -41,13 +42,19 @@ class _HomeScreenState extends State<HomeScreen> {
               })),
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
-                  var bloc = BlocProvider.of<TasksBloc>(taskContext);
-                  bloc.add(AddNewTask(Task(
-                    uid: Uuid().v4(),
-                    title: "New task in the neighborhood",
-                    minSeconds: 120,
-                    maxSeconds: 1200,
-                  )));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => TaskScreen()));
+
+                  // // add new task
+                  // var bloc = BlocProvider.of<TasksBloc>(taskContext);
+                  // bloc.add(
+                  //   AddNewTask(Task(
+                  //   uid: Uuid().v4(),
+                  //   title: "New task in the neighborhood",
+                  //   minSeconds: 120,
+                  //   maxSeconds: 1200,
+                  // )
+                  // ));
                 },
                 tooltip: 'Add new task',
                 child: Icon(Icons.add),
