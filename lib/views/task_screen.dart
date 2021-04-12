@@ -58,9 +58,10 @@ class _TaskScreenState extends State<TaskScreen> {
                 _bloc.add(AddNewTask(Task(
                   uid: Uuid().v4(),
                   title: _titleController.text,
-                  maxSeconds: int.tryParse(_maxController.text),
-                  minSeconds: int.tryParse(_minController.text),
+                  maxSeconds: int.tryParse(_maxController.text)! * 60,
+                  minSeconds: int.tryParse(_minController.text)! * 60,
                 )));
+                Navigator.pop(context);
               },
             )
           ],

@@ -17,56 +17,40 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<TasksBloc>(
-      create: (context) => TasksBloc()..add(InitializeDailyTasksBasedOnTasks()),
-      child: BlocBuilder<TasksBloc, TasksState>(
-        builder: (taskContext, state) {
-          if (state is TasksChanged) {
-            return Scaffold(
-              appBar: AppBar(
-                title: Text('Daily Tasks'),
-              ),
-              body: Container(child: Builder(builder: (_) {
-                var tasks = state.dailyTasks;
-                if (tasks.length > 0) {
-                  return ListView.builder(
-                      itemCount: tasks.length,
-                      itemBuilder: (_, i) => BlocProvider<DailyTaskBloc>(
-                          key: GlobalKey(),
-                          create: (ctx) => DailyTaskBloc()
-                            ..add(InitDailyTaskValues(tasks[i])),
-                          child: DailyTaskItem()));
-                } else {
-                  return Center(child: Text('no task in the list'));
-                }
-              })),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (taskContext) => TaskScreen()));
-
-                  // // add new task
-                  // var bloc = BlocProvider.of<TasksBloc>(taskContext);
-                  // bloc.add(
-                  //   AddNewTask(Task(
-                  //   uid: Uuid().v4(),
-                  //   title: "New task in the neighborhood",
-                  //   minSeconds: 120,
-                  //   maxSeconds: 1200,
-                  // )
-                  // ));
-                },
-                tooltip: 'Add new task',
-                child: Icon(Icons.add),
-              ),
-            );
-          } else {
-            return Center(child: Text('retrieving the task list'));
-          }
-        },
-      ),
+    return BlocBuilder<TasksBloc, TasksState>(
+      builder: (taskContext, state) {
+        if (state is TasksChanged) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Daily Tasks'),
+            ),
+            body: Container(child: Builder(builder: (_) {
+              var tasks = state.dailyTasks;
+              if (tasks.length > 0) {
+                return ListView.builder(
+                    itemCount: tasks.length,
+                    itemBuilder: (_, i) => BlocProvider<DailyTaskBloc>(
+                        key: GlobalKey(),
+                        create: (ctx) =>
+                            DailyTaskBloc()..add(InitDailyTaskValues(tasks[i])),
+                        child: DailyTaskItem()));
+              } else {
+                return Center(child: Text('no task in the list'));
+              }
+            })),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (taskContext) => TaskScreen()));
+              },
+              tooltip: 'Add new task',
+              child: Icon(Icons.add),
+            ),
+          );
+        } else {
+          return Center(child: Text('retrieving the task list'));
+        }
+      },
     );
   }
 }
