@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:todotimer/models/task.dart';
 import 'package:todotimer/models/task_daily.dart';
 import 'package:todotimer/services/task_service.dart';
 
@@ -14,7 +15,9 @@ class DailyTaskService {
     if (_instance == null) {
       _instance = DailyTaskService._internal();
       _todaysTasksKey = DateTime.now().year.toString() +
+          "-" +
           DateTime.now().month.toString() +
+          "-" +
           DateTime.now().day.toString();
     }
     return _instance;
@@ -47,26 +50,47 @@ class DailyTaskService {
     return res ?? false;
   }
 
-  Future<List<TaskDaily>> getTasksDaily() async {
+  Future<List<TaskDaily>> initializeDailyTasks() async {
     DbService? _db = DbService.getInstance();
 
-    List<TaskDaily> dailyTasks = [];
-    String tasksStr = await _db?.getJson(_todaysTasksKey) ?? "[]";
-    dailyTasks = convertToTasksList(tasksStr);
+    String todaysTasksStr = await _db?.getJson(_todaysTasksKey) ?? "[]";
+    List<TaskDaily> dailyTasks = convertToTasksList(todaysTasksStr);
+    List<Task> tasks = await TaskService.getInstance()!.getTasks();
+
+    print("tasks count: ${tasks.length}");
+    print("daily task count: ${dailyTasks.length}");
+
+    if (dailyTasks.length != tasks.length) {
+      // initialize the daily tasks from tasks
+      tasks.forEach((t) async {
+        bool existsInDailyTasks = checkIfDailyTaskExist(dailyTasks, t);
+        if (!existsInDailyTasks) {
+          print('task not exist in daily tasks list, creating (id): ${t.uid}');
+          TaskDaily dailyTask = TaskDaily(
+            task: t,
+            elapsedSeconds: 0,
+          );
+          dailyTasks.add(dailyTask);
+        }
+      });
+
+      await _db?.saveAsJson(_todaysTasksKey, convertToJson(dailyTasks));
+    }
 
     return dailyTasks;
   }
 
-  Future<List<TaskDaily>> initDailyTasks() async {
-    var tasks = await TaskService.getInstance()?.getTasks();
-    if (tasks != null) {
-      var dailyTasksInit =
-          tasks.map((t) => TaskDaily(task: t, elapsedSeconds: 0)).toList();
-      // await saveTasksDaily(dailyTasksInit);
-      return dailyTasksInit;
-    } else {
-      return [];
-    }
+  Future<List<TaskDaily>> getTasksDaily() async {
+    DbService? _db = DbService.getInstance();
+
+    String todaysTasksStr = await _db?.getJson(_todaysTasksKey) ?? "[]";
+    List<TaskDaily> dailyTasks = convertToTasksList(todaysTasksStr);
+
+    return dailyTasks;
+  }
+
+  bool checkIfDailyTaskExist(List<TaskDaily> dailyTasks, Task task) {
+    return dailyTasks.any((dt) => dt.task?.uid == task.uid);
   }
 
   Future<bool?> saveTasksDaily(List<TaskDaily> tasksDaily) async {

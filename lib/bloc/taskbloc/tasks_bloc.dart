@@ -22,6 +22,11 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       var dailyTasks = await DailyTaskService.getInstance()?.getTasksDaily();
       if (dailyTasks != null) {
         yield TasksChanged(dailyTasks);
+      } else {
+        // initialize the daily tasks here
+        var dailyTasks =
+            await DailyTaskService.getInstance()!.initializeDailyTasks();
+        yield TasksChanged(dailyTasks);
       }
     } else if (event is AddNewTask) {
       await TaskService.getInstance()?.add(event.task);
