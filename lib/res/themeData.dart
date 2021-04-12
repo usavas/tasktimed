@@ -5,7 +5,7 @@ VisualDensity kVisualDensity = VisualDensity.adaptivePlatformDensity;
 ThemeData kLightTheme = ThemeData(
   visualDensity: kVisualDensity,
   brightness: Brightness.light,
-  primaryColor: Colors.green[200],
+  primaryColor: Colors.green[300],
   accentColor: Colors.blue[400],
   scaffoldBackgroundColor: Colors.grey[50],
   focusColor: Colors.blue[400],
