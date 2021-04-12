@@ -11,8 +11,8 @@ ThemeData kLightTheme = ThemeData(
   focusColor: Colors.blue[400],
   primaryColorBrightness: Brightness.dark,
   textTheme: TextTheme(
-    bodyText1: TextStyle(color: Colors.black87, fontSize: 16),
-    bodyText2: TextStyle(color: Colors.black87, fontSize: 12),
+    bodyText1: TextStyle(color: Colors.black87, fontSize: 18),
+    bodyText2: TextStyle(color: Colors.black87, fontSize: 16),
   ),
   buttonTheme: ButtonThemeData(
     buttonColor: Colors.amber,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:todotimer/bloc/dailytask_bloc/dailytask_bloc.dart';
 import 'package:todotimer/bloc/taskbloc/tasks_bloc.dart';
 import 'package:todotimer/models/task.dart';
@@ -39,158 +40,147 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
         }
 
         TextStyle _textStyle = Theme.of(context).textTheme.bodyText1!;
-        // TextStyle _textStyleBold = Theme.of(context)
-        //     .textTheme
-        //     .bodyText1!
-        //     .copyWith(fontWeight: FontWeight.bold);
+        TextStyle _textStyle2 = Theme.of(context).textTheme.bodyText2!;
 
-        return Card(
-          color: Colors.grey[200],
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          margin: EdgeInsets.only(
-            top: 12,
-            left: 20,
-            right: 20,
-          ),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _dailyTask!.task!.title ?? "",
-                      style: _textStyle,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 4),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Time left:",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
+        return Slidable(
+          actionPane: SlidableDrawerActionPane(),
+          actionExtentRatio: 0.18,
+          direction: Axis.horizontal,
+          child: Card(
+            color: Colors.grey[200],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            margin: EdgeInsets.only(
+              top: 12,
+              left: 20,
+              right: 20,
+            ),
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 24,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _dailyTask!.task!.title ?? "",
+                        style: _textStyle,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 8),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "Time left:",
+                            style: _textStyle2,
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: 8,
-                          ),
-                        ),
-                        Text(
-                          _secondsLeft?.toString() ??
-                              _dailyTask.task?.maxSeconds?.toString() ??
-                              "",
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        InkWell(
-                          child: Container(
-                            padding: EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color:
-                                  Theme.of(context).accentColor.withOpacity(.6),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: 8,
                             ),
-                            child: Icon(_toggleCountDown
-                                ? Icons.play_arrow_rounded
-                                : Icons.pause),
                           ),
-                          onTap: () {
-                            final _bloc =
-                                BlocProvider.of<DailyTaskBloc>(context);
-                            if (_toggleCountDown) {
-                              // start the timer
-                              _bloc.add(StartCountDown(
-                                _dailyTask ?? TaskDaily(),
-                                _dailyTask?.elapsedSeconds ?? 0,
-                              ));
-                            } else {
-                              _bloc.add(
-                                StopCountDown(
+                          Text(
+                            _secondsLeft?.toString() ??
+                                _dailyTask.task?.maxSeconds?.toString() ??
+                                "",
+                            style: _textStyle2,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          InkWell(
+                            child: Container(
+                              padding: EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Theme.of(context)
+                                    .accentColor
+                                    .withOpacity(.8),
+                              ),
+                              child: Icon(
+                                _toggleCountDown
+                                    ? Icons.play_arrow_rounded
+                                    : Icons.pause,
+                                color: Colors.white70,
+                                size: 32,
+                              ),
+                            ),
+                            onTap: () {
+                              final _bloc =
+                                  BlocProvider.of<DailyTaskBloc>(context);
+                              if (_toggleCountDown) {
+                                // start the timer
+                                _bloc.add(StartCountDown(
                                   _dailyTask ?? TaskDaily(),
-                                  _secondsLeft ?? 0,
-                                ),
-                              );
-                            }
-                            _toggleCountDown = !_toggleCountDown;
-                          },
-                        ),
-                      ],
-                    )
-                  ],
-                )
-              ],
+                                  _dailyTask?.elapsedSeconds ?? 0,
+                                ));
+                              } else {
+                                _bloc.add(
+                                  StopCountDown(
+                                    _dailyTask ?? TaskDaily(),
+                                    _secondsLeft ?? 0,
+                                  ),
+                                );
+                              }
+                              _toggleCountDown = !_toggleCountDown;
+                            },
+                          ),
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
+          actions: [
+            InkWell(
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.red,
+                ),
+                child: Icon(
+                  Icons.delete,
+                  size: 22,
+                  color: Colors.white,
+                ),
+              ),
+              onTap: () {
+                BlocProvider.of<TasksBloc>(context)
+                    .add(DeleteTask(_dailyTask?.task ?? Task()));
+                print('deleted');
+              },
+            ),
+            InkWell(
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.green,
+                ),
+                child: Icon(
+                  Icons.edit_rounded,
+                  size: 22,
+                  color: Colors.white,
+                ),
+              ),
+              onTap: () {},
+            ),
+          ],
         );
-
-        // return Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //   children: [
-        //     Text(_dailyTask?.task?.title ?? ""),
-        //     Column(
-        //       children: [
-        //         Text(
-        //           "Time left:",
-        //           style: TextStyle(fontWeight: FontWeight.bold),
-        //         ),
-        //         Text(
-        //           _secondsLeft?.toString() ??
-        //               _dailyTask?.task?.maxSeconds?.toString() ??
-        //               "",
-        //         ),
-        //       ],
-        //     ),
-        //     Column(
-        //       children: [
-        //         ElevatedButton(
-        //           child: Container(
-        //             child: Text('S'),
-        //           ),
-        //           onPressed: () {
-        //             final _bloc = BlocProvider.of<DailyTaskBloc>(context);
-
-        //             if (_toggleCountDown) {
-        //               // start the timer
-        //               _bloc.add(StartCountDown(
-        //                 _dailyTask ?? TaskDaily(),
-        //                 _dailyTask?.elapsedSeconds ?? 0,
-        //               ));
-        //             } else {
-        //               _bloc.add(
-        //                 StopCountDown(
-        //                   _dailyTask ?? TaskDaily(),
-        //                   _secondsLeft ?? 0,
-        //                 ),
-        //               );
-        //             }
-        //             _toggleCountDown = !_toggleCountDown;
-        //           },
-        //         ),
-        //         ElevatedButton(
-        //           child: Text('D'),
-        //           onPressed: () {
-        //             BlocProvider.of<TasksBloc>(context)
-        //                 .add(DeleteTask(_dailyTask?.task ?? Task()));
-        //             print('deleted');
-        //           },
-        //         )
-        //       ],
-        //     ),
-        //   ],
-        // );
       },
     );
   }
