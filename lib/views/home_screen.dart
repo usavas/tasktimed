@@ -42,8 +42,10 @@ class _HomeScreenState extends State<HomeScreen> {
               })),
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => TaskScreen()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (taskContext) => TaskScreen()));
 
                   // // add new task
                   // var bloc = BlocProvider.of<TasksBloc>(taskContext);
