@@ -5,6 +5,7 @@ import 'package:todotimer/bloc/dailytask_bloc/dailytask_bloc.dart';
 import 'package:todotimer/bloc/taskbloc/tasks_bloc.dart';
 import 'package:todotimer/models/task.dart';
 import 'package:todotimer/models/task_daily.dart';
+import 'package:todotimer/views/progress_bar.dart';
 
 class DailyTaskItem extends StatefulWidget {
   DailyTaskItem();
@@ -38,6 +39,12 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
           _dailyTask = state.dailyTask;
           _secondsLeft = state.timeLeft;
         }
+
+        int _maxSeconds = _dailyTask?.task?.maxSeconds ?? 0;
+        double _percentage = (_secondsLeft ?? 0) / _maxSeconds;
+
+        print(_maxSeconds.toString());
+        print(_percentage.toString());
 
         TextStyle _textStyle = Theme.of(context).textTheme.bodyText1!;
         TextStyle _textStyle2 = Theme.of(context).textTheme.bodyText2!;
@@ -93,6 +100,10 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
                           ),
                         ],
                       ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 12),
+                      ),
+                      ProgressBar(_percentage),
                     ],
                   ),
                   Column(
