@@ -19,37 +19,43 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<TasksBloc, TasksState>(
       builder: (taskContext, state) {
-        if (state is TasksChanged) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text('Daily Tasks'),
-            ),
-            body: Container(child: Builder(builder: (_) {
-              var tasks = state.dailyTasks;
-              if (tasks.length > 0) {
-                return ListView.builder(
-                    itemCount: tasks.length,
-                    itemBuilder: (_, i) => BlocProvider<DailyTaskBloc>(
-                        key: GlobalKey(),
-                        create: (ctx) =>
-                            DailyTaskBloc()..add(InitDailyTaskValues(tasks[i])),
-                        child: DailyTaskItem()));
-              } else {
-                return Center(child: Text('no task in the list'));
-              }
-            })),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (taskContext) => TaskScreen()));
-              },
-              tooltip: 'Add new task',
-              child: Icon(Icons.add),
-            ),
-          );
-        } else {
-          return Center(child: Text('retrieving the task list'));
-        }
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Daily Tasks'),
+          ),
+          body: Builder(builder: (context) {
+            if (state is TasksChanged) {
+              return Container(child: Builder(builder: (_) {
+                var tasks = state.dailyTasks;
+                if (tasks.length > 0) {
+                  return ListView.builder(
+                      itemCount: tasks.length,
+                      itemBuilder: (_, i) => BlocProvider<DailyTaskBloc>(
+                          key: GlobalKey(),
+                          create: (ctx) => DailyTaskBloc()
+                            ..add(InitDailyTaskValues(tasks[i])),
+                          child: DailyTaskItem()));
+                } else {
+                  return Center(
+                    child: Text(
+                      'No tasks in the list!',
+                    ),
+                  );
+                }
+              }));
+            } else {
+              return Center(child: Text('Loading the tasks...'));
+            }
+          }),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (taskContext) => TaskScreen()));
+            },
+            tooltip: 'Add new task',
+            child: Icon(Icons.add),
+          ),
+        );
       },
     );
   }
