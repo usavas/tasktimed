@@ -12,7 +12,7 @@ class ProgressBar extends StatelessWidget {
       color: Colors.black87,
     );
     const BorderRadius _borderRadius = BorderRadius.all(
-      Radius.circular(4),
+      Radius.circular(16),
     );
 
     const double _lineHeight = 12;
