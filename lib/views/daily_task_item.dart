@@ -42,9 +42,6 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
         int _maxSeconds = _dailyTask?.task?.maxSeconds ?? 0;
         double _percentage = (_secondsLeft ?? 0) / _maxSeconds;
 
-        // print(_maxSeconds.toString());
-        // print(_percentage.toString());
-
         TextStyle _textStyle = Theme.of(context).textTheme.bodyText1!;
         TextStyle _textStyle2 = Theme.of(context).textTheme.bodyText2!;
 
@@ -173,21 +170,6 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
                     .add(DeleteTask(_dailyTask?.task ?? Task()));
                 print('deleted');
               },
-            ),
-            InkWell(
-              child: Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.green,
-                ),
-                child: Icon(
-                  Icons.edit_rounded,
-                  size: 22,
-                  color: Colors.white,
-                ),
-              ),
-              onTap: () {},
             ),
           ],
         );

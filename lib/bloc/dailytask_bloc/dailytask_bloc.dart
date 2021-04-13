@@ -35,12 +35,8 @@ class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
         }
       });
     } else if (event is CountDown) {
-      //
-      print("countdown goes on...");
       yield CountDownState(event.dailyTask, event.elapsedSeconds);
     } else if (event is StopCountDown) {
-      //
-      print("countdown finishes...");
       _timer.cancel();
       await DailyTaskService.getInstance()?.update(event.taskDaily);
       yield CountDownStopped(event.taskDaily, event.secondsLeft);
