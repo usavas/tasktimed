@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todotimer/bloc/dailytask_bloc/dailytask_bloc.dart';
 import 'package:todotimer/bloc/taskbloc/tasks_bloc.dart';
-import 'package:todotimer/models/task.dart';
 import 'package:todotimer/views/daily_task_item.dart';
 import 'package:todotimer/views/task_screen.dart';
-import 'package:uuid/uuid.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen();

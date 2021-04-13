@@ -34,7 +34,6 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
         } else if (state is CountDownState) {
           _dailyTask = state.dailyTask;
           _secondsLeft = state.leftSeconds;
-          print('seconds left: ${_secondsLeft.toString()}');
         } else if (state is CountDownStopped) {
           _dailyTask = state.dailyTask;
           _secondsLeft = state.timeLeft;
@@ -43,8 +42,8 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
         int _maxSeconds = _dailyTask?.task?.maxSeconds ?? 0;
         double _percentage = (_secondsLeft ?? 0) / _maxSeconds;
 
-        print(_maxSeconds.toString());
-        print(_percentage.toString());
+        // print(_maxSeconds.toString());
+        // print(_percentage.toString());
 
         TextStyle _textStyle = Theme.of(context).textTheme.bodyText1!;
         TextStyle _textStyle2 = Theme.of(context).textTheme.bodyText2!;

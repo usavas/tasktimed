@@ -23,18 +23,24 @@ class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
       yield DailyTaskInitial(event.dailyTask);
     } else if (event is StartCountDown) {
       _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-        if (timer.tick >= event.dailyTask.getSecondsLeftForTheDay()) {
-          add(StopCountDown(
-              event.dailyTask, event.dailyTask.getSecondsLeftForTheDay()));
+        int _secondsLeft = event.dailyTask.getSecondsLeftForTheDay();
+        //
+        print("timer.tick: ${timer.tick.toString()}");
+        print("Seconds left: $_secondsLeft");
+        if (timer.tick > _secondsLeft) {
+          add(StopCountDown(event.dailyTask, _secondsLeft));
         } else {
-          int _secondsLeft = event.dailyTask.getSecondsLeftForTheDay();
           event.dailyTask.elapsedSeconds = event.dailyTask.elapsedSeconds! + 1;
           add(CountDown(event.dailyTask, _secondsLeft - 1));
         }
       });
     } else if (event is CountDown) {
+      //
+      print("countdown goes on...");
       yield CountDownState(event.dailyTask, event.elapsedSeconds);
     } else if (event is StopCountDown) {
+      //
+      print("countdown finishes...");
       _timer.cancel();
       await DailyTaskService.getInstance()?.update(event.taskDaily);
       yield CountDownStopped(event.taskDaily, event.secondsLeft);
