@@ -17,6 +17,26 @@ class DailyTaskItem extends StatefulWidget {
 class _DailyTaskItemState extends State<DailyTaskItem> {
   bool _toggleCountDown = true;
 
+  String _calculateTimeRemanining(int? seconds, int? defaultValue) {
+    int secs = seconds ?? defaultValue ?? 0;
+
+    int mins = (secs / 60).truncate();
+    int secsLeft = (secs % 60);
+
+    int hours = (mins / 60).truncate();
+    int minsLeft = mins % 60;
+
+    String secsString = (secsLeft < 10) ? "0$secsLeft" : secsLeft.toString();
+    String minsString = (minsLeft < 10) ? "0$minsLeft" : minsLeft.toString();
+    String hoursString = "0$hours";
+
+    if (hours > 0) {
+      return "$hoursString:$minsString:$secsString";
+    } else {
+      return "$minsString:$secsString";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DailyTaskBloc, DailyTaskState>(
@@ -39,6 +59,9 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
 
         int _maxSeconds = _dailyTask?.task?.maxSeconds ?? 0;
         double _percentage = (_secondsLeft ?? 0) / _maxSeconds;
+
+        String _timeRemaining = _calculateTimeRemanining(
+            _secondsLeft, _dailyTask?.task?.maxSeconds);
 
         TextStyle _textStyle = Theme.of(context).textTheme.bodyText1!;
         TextStyle _textStyle2 = Theme.of(context).textTheme.bodyText2!;
@@ -88,9 +111,7 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
                             ),
                           ),
                           Text(
-                            _secondsLeft?.toString() ??
-                                _dailyTask?.task?.maxSeconds?.toString() ??
-                                "...",
+                            _timeRemaining,
                             style: _textStyle2,
                           ),
                         ],

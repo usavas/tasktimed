@@ -49,10 +49,11 @@ class _TaskScreenState extends State<TaskScreen> {
                     decoration: InputDecoration(labelText: "Task title"),
                     controller: _titleController,
                     validator: (val) {
+                      int minChars = 3;
                       if (val?.trim().isEmpty ?? true) {
                         return "Please enter a title";
-                      } else if ((val?.trim().length ?? 0) < 4) {
-                        return "Enter a valid title (longer than 4 chars";
+                      } else if ((val?.trim().length ?? 0) < minChars) {
+                        return "Enter a valid title (longer than $minChars chars";
                       }
                     },
                   ),
@@ -63,9 +64,11 @@ class _TaskScreenState extends State<TaskScreen> {
                     validator: (val) {
                       var res = int.tryParse(val ?? '');
                       if (val?.trim().isEmpty ?? true) {
-                        return "You must enter a max number";
+                        return "Please enter a max number";
                       } else if (res == null) {
                         return "Please enter a valid number";
+                      } else if (res < 15 || res > 480) {
+                        return "Please enter a value between 15 and 480";
                       }
                     },
                   ),
