@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:todotimer/models/task.dart';
 import 'package:todotimer/models/task_daily.dart';
+import 'package:todotimer/services/alarm_service.dart';
 import 'package:todotimer/services/daily_task_service.dart';
 
 part 'dailytask_event.dart';
@@ -25,11 +27,11 @@ class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
       yield DailyTaskInitial(event.dailyTask);
       _timer = Timer.periodic(Duration(seconds: 1), (timer) {
         int _secondsLeft = event.dailyTask.getSecondsLeftForTheDay();
-        //
-        print("timer.tick: ${timer.tick.toString()}");
-        print("Seconds left: $_secondsLeft");
         if (_secondsLeft <= 0) {
           add(StopCountDown(event.dailyTask, _secondsLeft));
+
+          AlarmService.getInstance()
+              ?.sendNotification(event.dailyTask.task ?? Task());
         } else {
           event.dailyTask.elapsedSeconds = event.dailyTask.elapsedSeconds! + 1;
           add(CountDown(event.dailyTask, _secondsLeft - 1));

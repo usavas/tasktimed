@@ -20,10 +20,17 @@ dependencies:
   equatable: ^2.0.0
   flutter_slidable: ^0.6.0
   percent_indicator: "^2.1.7+2"
+  flutter_local_notifications: ^5.0.0+1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.9.0"
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/icon.png"
 
 flutter:
   uses-material-design: true

@@ -17,6 +17,9 @@ class _TaskScreenState extends State<TaskScreen> {
   final _maxController = new TextEditingController();
   final _minController = new TextEditingController();
 
+  final kMaxTime = 480;
+  final kMinTime = 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +70,7 @@ class _TaskScreenState extends State<TaskScreen> {
                         return "Please enter a max number";
                       } else if (res == null) {
                         return "Please enter a valid number";
-                      } else if (res < 15 || res > 480) {
+                      } else if (res < kMinTime || res > kMaxTime) {
                         return "Please enter a value between 15 and 480";
                       }
                     },
