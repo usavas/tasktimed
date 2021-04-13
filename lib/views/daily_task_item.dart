@@ -25,9 +25,6 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
         int? _secondsLeft;
 
         if (state is DailyTaskLoading) {
-          // return Center(
-          //   child: Text('Loading...'),
-          // );
         } else if (state is DailyTaskInitial) {
           _dailyTask = state.dailyTask;
           _secondsLeft = _dailyTask.getSecondsLeftForTheDay();
@@ -52,6 +49,7 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
           direction: Axis.horizontal,
           child: Card(
             color: Colors.grey[200],
+            elevation: 4,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
