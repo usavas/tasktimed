@@ -25,16 +25,15 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
         int? _secondsLeft;
 
         if (state is DailyTaskLoading) {
-          return Center(
-            child: Text('Loading...'),
-          );
+          // return Center(
+          //   child: Text('Loading...'),
+          // );
         } else if (state is DailyTaskInitial) {
           _dailyTask = state.dailyTask;
           _secondsLeft = _dailyTask.getSecondsLeftForTheDay();
         } else if (state is CountDownState) {
           _dailyTask = state.dailyTask;
           _secondsLeft = state.leftSeconds;
-          print('seconds left: ${_secondsLeft.toString()}');
         } else if (state is CountDownStopped) {
           _dailyTask = state.dailyTask;
           _secondsLeft = state.timeLeft;
@@ -42,9 +41,6 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
 
         int _maxSeconds = _dailyTask?.task?.maxSeconds ?? 0;
         double _percentage = (_secondsLeft ?? 0) / _maxSeconds;
-
-        print(_maxSeconds.toString());
-        print(_percentage.toString());
 
         TextStyle _textStyle = Theme.of(context).textTheme.bodyText1!;
         TextStyle _textStyle2 = Theme.of(context).textTheme.bodyText2!;
@@ -75,7 +71,7 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        _dailyTask!.task!.title ?? "",
+                        _dailyTask?.task?.title ?? "...",
                         style: _textStyle,
                       ),
                       Padding(
@@ -94,8 +90,8 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
                           ),
                           Text(
                             _secondsLeft?.toString() ??
-                                _dailyTask.task?.maxSeconds?.toString() ??
-                                "",
+                                _dailyTask?.task?.maxSeconds?.toString() ??
+                                "...",
                             style: _textStyle2,
                           ),
                         ],
@@ -103,7 +99,9 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
                       Padding(
                         padding: EdgeInsets.only(top: 12),
                       ),
-                      ProgressBar(_percentage),
+                      ProgressBar((_dailyTask?.task?.maxSeconds == null
+                          ? 1
+                          : _percentage)),
                     ],
                   ),
                   Column(
@@ -174,21 +172,6 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
                     .add(DeleteTask(_dailyTask?.task ?? Task()));
                 print('deleted');
               },
-            ),
-            InkWell(
-              child: Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.green,
-                ),
-                child: Icon(
-                  Icons.edit_rounded,
-                  size: 22,
-                  color: Colors.white,
-                ),
-              ),
-              onTap: () {},
             ),
           ],
         );
