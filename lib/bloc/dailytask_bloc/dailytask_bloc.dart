@@ -22,6 +22,7 @@ class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
     if (event is InitDailyTaskValues) {
       yield DailyTaskInitial(event.dailyTask);
     } else if (event is StartCountDown) {
+      yield DailyTaskInitial(event.dailyTask);
       _timer = Timer.periodic(Duration(seconds: 1), (timer) {
         int _secondsLeft = event.dailyTask.getSecondsLeftForTheDay();
         //

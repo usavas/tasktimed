@@ -37,6 +37,7 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
         } else if (state is CountDownStopped) {
           _dailyTask = state.dailyTask;
           _secondsLeft = state.timeLeft;
+          _toggleCountDown = true;
         }
 
         int _maxSeconds = _dailyTask?.task?.maxSeconds ?? 0;
@@ -100,7 +101,7 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
                         padding: EdgeInsets.only(top: 12),
                       ),
                       ProgressBar((_dailyTask?.task?.maxSeconds == null
-                          ? 1
+                          ? 0
                           : _percentage)),
                     ],
                   ),
@@ -129,7 +130,6 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
                               final _bloc =
                                   BlocProvider.of<DailyTaskBloc>(context);
                               if (_toggleCountDown) {
-                                // start the timer
                                 _bloc.add(StartCountDown(
                                   _dailyTask ?? TaskDaily(),
                                   _dailyTask?.elapsedSeconds ?? 0,
@@ -142,7 +142,9 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
                                   ),
                                 );
                               }
-                              _toggleCountDown = !_toggleCountDown;
+                              _toggleCountDown = ((_secondsLeft ?? 0) <= 0)
+                                  ? true
+                                  : !_toggleCountDown;
                             },
                           ),
                         ],
