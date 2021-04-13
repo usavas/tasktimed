@@ -9,7 +9,7 @@ class ProgressBar extends StatelessWidget {
   Widget build(BuildContext context) {
     Border _border = Border.all(
       width: .6,
-      color: Colors.black87,
+      color: Colors.white,
     );
     const BorderRadius _borderRadius = BorderRadius.all(
       Radius.circular(16),
@@ -29,13 +29,16 @@ class ProgressBar extends StatelessWidget {
             width: (3 * 100) / 1.4,
             height: _lineHeight,
           ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: _borderRadius,
-              color: Colors.green,
+          Positioned(
+            top: _border.dimensions.vertical,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: _borderRadius,
+                color: Colors.green,
+              ),
+              width: (3 * (percentage * 100)) / 1.4,
+              height: _lineHeight - (_border.dimensions.vertical * 2),
             ),
-            width: (3 * (percentage * 100)) / 1.4,
-            height: _lineHeight,
           ),
         ],
       ),
