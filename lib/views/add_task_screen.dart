@@ -44,7 +44,7 @@ class _TaskScreenState extends State<TaskScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextFormField(
-                  decoration: InputDecoration(labelText: "Enter task title"),
+                  decoration: InputDecoration(labelText: "Task title"),
                   controller: _titleController,
                   validator: (val) {
                     if (val?.trim().isEmpty ?? true) {
@@ -55,7 +55,7 @@ class _TaskScreenState extends State<TaskScreen> {
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: "Enter max minutes"),
+                  decoration: InputDecoration(labelText: "Max minutes"),
                   keyboardType: TextInputType.number,
                   controller: _maxController,
                   validator: (val) {
@@ -68,7 +68,7 @@ class _TaskScreenState extends State<TaskScreen> {
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: "Enter min minutes"),
+                  decoration: InputDecoration(labelText: "Min minutes"),
                   keyboardType: TextInputType.number,
                   controller: _minController,
                 ),
