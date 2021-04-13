@@ -27,7 +27,7 @@ class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
         //
         print("timer.tick: ${timer.tick.toString()}");
         print("Seconds left: $_secondsLeft");
-        if (timer.tick > _secondsLeft) {
+        if (_secondsLeft <= 0) {
           add(StopCountDown(event.dailyTask, _secondsLeft));
         } else {
           event.dailyTask.elapsedSeconds = event.dailyTask.elapsedSeconds! + 1;
