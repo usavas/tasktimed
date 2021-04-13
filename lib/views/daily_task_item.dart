@@ -25,9 +25,9 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
         int? _secondsLeft;
 
         if (state is DailyTaskLoading) {
-          return Center(
-            child: Text('Loading...'),
-          );
+          // return Center(
+          //   child: Text('Loading...'),
+          // );
         } else if (state is DailyTaskInitial) {
           _dailyTask = state.dailyTask;
           _secondsLeft = _dailyTask.getSecondsLeftForTheDay();
@@ -71,7 +71,7 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        _dailyTask!.task!.title ?? "",
+                        _dailyTask?.task?.title ?? "...",
                         style: _textStyle,
                       ),
                       Padding(
@@ -90,8 +90,8 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
                           ),
                           Text(
                             _secondsLeft?.toString() ??
-                                _dailyTask.task?.maxSeconds?.toString() ??
-                                "",
+                                _dailyTask?.task?.maxSeconds?.toString() ??
+                                "...",
                             style: _textStyle2,
                           ),
                         ],
@@ -99,7 +99,9 @@ class _DailyTaskItemState extends State<DailyTaskItem> {
                       Padding(
                         padding: EdgeInsets.only(top: 12),
                       ),
-                      ProgressBar(_percentage),
+                      ProgressBar((_dailyTask?.task?.maxSeconds == null
+                          ? 1
+                          : _percentage)),
                     ],
                   ),
                   Column(
